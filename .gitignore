@@ -1,0 +1,11 @@
+.*
+!.git*
+*.a
+*.so
+*.dylib
+*.dll
+/build
+/dep
+/dist
+/mm-build
+/metamodule-plugins

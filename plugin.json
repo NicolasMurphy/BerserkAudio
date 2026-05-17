@@ -1,0 +1,28 @@
+{
+  "slug": "BerserkAudio",
+  "name": "Berserk Audio",
+  "version": "2.0.0",
+  "license": "GPL-3.0-or-later",
+  "brand": "Berserk Audio",
+  "author": "Nicolas Murphy",
+  "authorUrl": "https://github.com/NicolasMurphy",
+  "sourceUrl": "https://github.com/NicolasMurphy/BerserkAudio",
+  "modules": [
+    {
+      "slug": "Scrambler",
+      "name": "Scrambler",
+      "description": "Alternates between clean passthrough and randomly reordered individual samples.",
+      "tags": [
+        "Effect"
+      ]
+    },
+    {
+      "slug": "Xenizer",
+      "name": "Xenizer",
+      "description": "Microtonal quantizer with preset scales.",
+      "tags": [
+        "Quantizer"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "MetaModuleBrandName": "Berserk Audio",
+  "MetaModuleBrandSlug": "BerserkAudio",
+  "MetaModulePluginMaintainer": "Nicolas Murphy",
+  "MetaModulePluginMaintainerUrl": "https://github.com/NicolasMurphy",
+  "MetaModuleDescription": "Modules from Berserk Audio: Scrambler (effect) and Xenizer (microtonal quantizer).",
+  "MetaModuleIncludedModules": [
+    {
+      "slug": "Scrambler",
+      "name": "Scrambler",
+      "displayName": "Scrambler"
+    },
+    {
+      "slug": "Xenizer",
+      "name": "Xenizer",
+      "displayName": "Xenizer"
+    }
+  ]
+}
