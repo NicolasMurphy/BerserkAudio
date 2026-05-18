@@ -140,14 +140,14 @@ struct XenizerWidget : ModuleWidget
         setModule(module);
         setPanel(createPanel(asset::plugin(pluginInstance, "res/Xenizer.svg")));
 
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.5, 32)), module, Xenizer::SCALE_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(22.98, 32)), module, Xenizer::SCALE_CV_INPUT));
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.5, 56)), module, Xenizer::MODE_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(22.98, 56)), module, Xenizer::MODE_CV_INPUT));
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(7.5, 80)), module, Xenizer::BASE_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(22.98, 80)), module, Xenizer::BASE_CV_INPUT));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(7.5, 108)), module, Xenizer::PITCH_INPUT));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(22.98, 108)), module, Xenizer::PITCH_OUTPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 32)), module, Xenizer::SCALE_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 32)), module, Xenizer::SCALE_CV_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 56)), module, Xenizer::MODE_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 56)), module, Xenizer::MODE_CV_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 80)), module, Xenizer::BASE_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 80)), module, Xenizer::BASE_CV_INPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 108)), module, Xenizer::PITCH_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30.64, 108)), module, Xenizer::PITCH_OUTPUT));
     }
 };
 

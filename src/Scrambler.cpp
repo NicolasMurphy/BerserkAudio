@@ -153,21 +153,17 @@ struct ScramblerWidget : ModuleWidget
         setModule(module);
         setPanel(createPanel(asset::plugin(pluginInstance, "res/Scrambler.svg")));
 
-        // Group 1: Clean
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(20, 22.5)), module, Scrambler::CLEAN_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(20, 37)), module, Scrambler::CVINC_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 32)), module, Scrambler::CLEAN_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 32)), module, Scrambler::CVINC_INPUT));
 
-        // Group 2: Scramble
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(20, 53.5)), module, Scrambler::SCRAMBLE_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(20, 67.7)), module, Scrambler::CVINS_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 56)), module, Scrambler::SCRAMBLE_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 56)), module, Scrambler::CVINS_INPUT));
 
-        // Group 3: Chunk
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(20, 84)), module, Scrambler::CHUNK_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(20, 98.5)), module, Scrambler::CVINCH_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 80)), module, Scrambler::CHUNK_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 80)), module, Scrambler::CVINCH_INPUT));
 
-        // Audio in/out
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(8.5, 110.5)), module, Scrambler::IN_INPUT));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(31.5, 110.5)), module, Scrambler::OUT_OUTPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 108)), module, Scrambler::IN_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30.64, 108)), module, Scrambler::OUT_OUTPUT));
     }
 };
 
