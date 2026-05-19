@@ -9,4 +9,5 @@ void init(Plugin* p) {
 
 	p->addModel(modelScrambler);
 	p->addModel(modelXenizer);
+	p->addModel(modelXenScribe);
 }
