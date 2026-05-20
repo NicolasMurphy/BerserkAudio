@@ -10,4 +10,6 @@ extern Plugin* pluginInstance;
 // Declare each Model, defined in each module source file
 extern Model* modelScrambler;
 extern Model* modelXenizer;
+#ifndef METAMODULE
 extern Model* modelXenScribe;
+#endif

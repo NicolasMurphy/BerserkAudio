@@ -9,5 +9,7 @@ void init(Plugin* p) {
 
 	p->addModel(modelScrambler);
 	p->addModel(modelXenizer);
+#ifndef METAMODULE
 	p->addModel(modelXenScribe);
+#endif
 }
