@@ -12,8 +12,6 @@ struct Scale
     float pitches_cents[N];
 };
 
-// Source .scl files preserved under `scales/` for reference; these constants
-// are the runtime source of truth and must match.
 static const Scale SCALES[] = {
     {"PBDE-71", 3465.227865f, {
         0.f,
@@ -38,6 +36,30 @@ static const Scale SCALES[] = {
         121.144693f, 354.802401f, 1026.589323f, 1648.074825f,
         2116.574096f, 2638.426614f, 2823.084797f, 2914.826909f,
         3175.671845f, 3184.209395f, 3866.243670f,
+    }},
+    {"Alpha-Muurolene", 4352.045060f, {
+        0.f,
+        443.314137f, 1263.979267f, 1552.903211f, 1779.758419f,
+        2993.560809f, 3561.469948f, 3657.389462f, 3663.963784f,
+        3712.534831f, 4075.896916f, 4209.942453f,
+    }},
+    {"Acridinone", 4404.286203f, {
+        0.f,
+        218.154988f, 946.042184f, 1618.323288f, 1713.472793f,
+        2565.749996f, 2690.033545f, 2712.821683f, 2917.366343f,
+        4182.314000f, 4313.695414f, 4376.112847f,
+    }},
+    {"2-Octanoylfuran", 1495.000000f, {
+        0.f,
+        10.000000f, 15.000000f, 135.000000f, 195.000000f,
+        362.000000f, 407.000000f, 483.000000f, 682.000000f,
+        759.000000f, 947.000000f, 1410.000000f,
+    }},
+    {"Alpha-D-Galactose", 3769.436891f, {
+        0.f,
+        10.533298f, 210.753410f, 451.662178f, 1114.815587f,
+        1421.581535f, 1695.033827f, 1913.589033f, 1918.627266f,
+        2112.316490f, 2655.950220f, 3222.399552f,
     }},
 };
 static constexpr int NUM_SCALES = sizeof(SCALES) / sizeof(SCALES[0]);
@@ -71,6 +93,7 @@ struct Xenizer : Module
         config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN);
         configSwitch(SCALE_PARAM, 0.f, (float)(NUM_SCALES - 1), 0.f, "Scale", {
             "PBDE-71", "F2 Toxin", "Dimethylaminobenzene", "Mycose",
+            "Alpha-Muurolene", "Acridinone", "2-Octanoylfuran", "Alpha-D-Galactose",
         });
         configSwitch(MODE_PARAM, 0.f, (float)(Scale::N - 1), 0.f, "Mode", {
             "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
