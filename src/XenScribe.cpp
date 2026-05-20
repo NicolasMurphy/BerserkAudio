@@ -148,16 +148,16 @@ struct XenScribeWidget : ModuleWidget
         setModule(module);
         setPanel(createPanel(asset::plugin(pluginInstance, "res/XenScribe.svg")));
 
-        auto *tf = createWidget<ScaleTextField>(mm2px(Vec(3, 8)));
-        tf->box.size = mm2px(Vec(34.64, 92));
+        auto *tf = createWidget<ScaleTextField>(mm2px(Vec(2, 2)));
+        tf->box.size = mm2px(Vec(36.64, 106));
         tf->multiline = true;
         tf->module = module;
         if (module)
             tf->setText(module->scaleText);
         addChild(tf);
 
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 108)), module, XenScribe::PITCH_INPUT));
-        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30.64, 108)), module, XenScribe::PITCH_OUTPUT));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10, 117)), module, XenScribe::PITCH_INPUT));
+        addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30.64, 117)), module, XenScribe::PITCH_OUTPUT));
     }
 };
 
