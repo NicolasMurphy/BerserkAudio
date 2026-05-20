@@ -11,7 +11,7 @@
     {
       "slug": "Scrambler",
       "name": "Scrambler",
-      "description": "Alternates between clean passthrough and randomly reordered individual samples.",
+      "description": "Sample-reordering effect.",
       "tags": [
         "Effect"
       ]
@@ -19,7 +19,7 @@
     {
       "slug": "Xenizer",
       "name": "Xenizer",
-      "description": "Microtonal quantizer with preset scales.",
+      "description": "Microtonal Quantizer with 8 built-in scales.",
       "tags": [
         "Quantizer"
       ]
@@ -27,7 +27,7 @@
     {
       "slug": "XenScribe",
       "name": "XenScribe",
-      "description": "Microtonal quantizer with text-input scale (cents).",
+      "description": "Microtonal Quantizer with text input for creating scales.",
       "tags": [
         "Quantizer"
       ]
