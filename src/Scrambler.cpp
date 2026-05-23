@@ -70,15 +70,25 @@ struct Scrambler : Module
         float cleanVal = params[CLEAN_PARAM].getValue();
         if (inputs[CVINC_INPUT].isConnected())
             cleanVal += inputs[CVINC_INPUT].getVoltage() * 1000.f;
-        int cleanLen = std::max(1, (int)cleanVal);
+        int cleanLen = std::max(0, (int)cleanVal);
 
         float scrambleVal = params[SCRAMBLE_PARAM].getValue();
         if (inputs[CVINS_INPUT].isConnected())
             scrambleVal += inputs[CVINS_INPUT].getVoltage() * 1000.f;
         // Clamp to MAX_SAMPLES so we never index past the pre-allocated buffer.
         // Using rack::clamp (from math.hpp) since the SDK targets C++11.
-        int scrambleLen = clamp((int)scrambleVal, 1, MAX_SAMPLES);
+        int scrambleLen = clamp((int)scrambleVal, 0, MAX_SAMPLES);
         float in = inputs[IN_INPUT].getVoltage();
+
+        // scramble=0 → pure bypass. Reset state so re-enabling starts fresh.
+        if (scrambleLen <= 0)
+        {
+            outputs[OUT_OUTPUT].setVoltage(in);
+            inClean = true;
+            inPlayback = false;
+            position = 0;
+            return;
+        }
 
         if (inPlayback)
         {
@@ -90,6 +100,14 @@ struct Scrambler : Module
                 position = 0;
             }
             return;
+        }
+
+        // clean=0 → skip clean phase, collect this sample directly.
+        if (inClean && cleanLen <= 0)
+        {
+            inClean = false;
+            collectLen = scrambleLen;
+            collectIndex = 0;
         }
 
         if (inClean)
