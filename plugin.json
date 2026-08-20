@@ -31,6 +31,15 @@
       "tags": [
         "Quantizer"
       ]
+    },
+    {
+      "slug": "Combverb",
+      "name": "Combverb",
+      "description": "Comb reverb with self-oscillating feedback.",
+      "tags": [
+        "Reverb",
+        "Effect"
+      ]
     }
   ]
 }

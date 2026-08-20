@@ -27,6 +27,7 @@ target_sources(BerserkAudio PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/plugin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Scrambler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Xenizer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Combverb.cpp
 )
 
 target_include_directories(BerserkAudio PRIVATE
