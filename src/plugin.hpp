@@ -8,9 +8,9 @@ using namespace rack;
 extern Plugin* pluginInstance;
 
 // Declare each Model, defined in each module source file
+extern Model* modelCombverb;
 extern Model* modelScrambler;
 extern Model* modelXenizer;
-extern Model* modelCombverb;
 #ifndef METAMODULE
 extern Model* modelXenScribe;
 #endif

@@ -3,8 +3,13 @@
   "MetaModuleBrandSlug": "BerserkAudio",
   "MetaModulePluginMaintainer": "Nicolas Murphy",
   "MetaModulePluginMaintainerUrl": "https://github.com/NicolasMurphy",
-  "MetaModuleDescription": "Scrambler (sample-reordering effect), Xenizer (microtonal quantizer with 8 built-in scales), and Combverb (comb reverb with self-oscillating feedback).",
+  "MetaModuleDescription": "Combverb (comb reverb with self-oscillating feedback), Scrambler (sample-reordering effect), and Xenizer (microtonal quantizer with 8 built-in scales).",
   "MetaModuleIncludedModules": [
+    {
+      "slug": "Combverb",
+      "name": "Combverb",
+      "displayName": "Combverb"
+    },
     {
       "slug": "Scrambler",
       "name": "Scrambler",
@@ -14,11 +19,6 @@
       "slug": "Xenizer",
       "name": "Xenizer",
       "displayName": "Xenizer"
-    },
-    {
-      "slug": "Combverb",
-      "name": "Combverb",
-      "displayName": "Combverb"
     }
   ]
 }
