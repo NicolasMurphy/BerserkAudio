@@ -1,3 +1,5 @@
+// Based on and inspired by Freeverb (Jezar at Dreampoint, public domain).
+
 #include "plugin.hpp"
 #include <cmath>
 
@@ -5,7 +7,7 @@ struct Combverb : Module
 {
     enum ParamId
     {
-        SIZE_PARAM,
+        FEEDBACK_PARAM,
         DAMP_PARAM,
         MIX_PARAM,
         PARAMS_LEN
@@ -13,7 +15,7 @@ struct Combverb : Module
     enum InputId
     {
         IN_INPUT,
-        SIZE_CV_INPUT,
+        FEEDBACK_CV_INPUT,
         DAMP_CV_INPUT,
         MIX_CV_INPUT,
         INPUTS_LEN
@@ -24,14 +26,26 @@ struct Combverb : Module
         OUTPUTS_LEN
     };
 
-    static constexpr int COMB_LEN[8] = {1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617};
+    static constexpr int COMB_LEN[8] = {521, 631, 769, 929, 1129, 1373, 1663, 2017};
     static constexpr int AP_LEN[4] = {556, 441, 341, 225};
-    static constexpr int COMB_MAX = 1617;
+    static constexpr int COMB_MAX = 2017;
     static constexpr int AP_MAX = 556;
+
+    static constexpr int NUM_COMBS = 8;
+    static constexpr int NUM_AP = 2;
 
     static constexpr float AP_FB = 0.5f;
     static constexpr float INPUT_GAIN = 0.015f;
-    static constexpr float DAMP_SCALE = 0.4f;
+    static constexpr float FB_CEILING = 4.f;
+    static constexpr float DAMP_FC_MAX = 18000.f;
+    static constexpr float DAMP_FC_MIN = 200.f;
+    static constexpr float TWO_PI = 6.28318530718f;
+
+    static constexpr float UNITY_POS = 2.f / 3.f;
+    static constexpr float DECAY_MIN = 0.1f;
+    static constexpr float DECAY_MAX = 30.f;
+    static constexpr float GROW_MAX = 24.f;
+    static constexpr int FB_DIVISION = 16;
 
     float combBuf[8][COMB_MAX] = {};
     int combIdx[8] = {};
@@ -40,17 +54,26 @@ struct Combverb : Module
     float apBuf[4][AP_MAX] = {};
     int apIdx[4] = {};
 
+    float fbCache[8] = {};
+    dsp::ClockDivider fbDivider;
+
     Combverb()
     {
         config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN);
-        configParam(SIZE_PARAM, 0.f, 1.f, 0.5f, "Size");
+        configParam(FEEDBACK_PARAM, 0.f, 1.f, 0.35f, "Feedback", "%", 0.f, 150.f);
         configParam(DAMP_PARAM, 0.f, 1.f, 0.5f, "Damp");
         configParam(MIX_PARAM, 0.f, 1.f, 0.5f, "Mix");
         configInput(IN_INPUT, "Audio");
-        configInput(SIZE_CV_INPUT, "Size CV");
+        configInput(FEEDBACK_CV_INPUT, "Feedback CV");
         configInput(DAMP_CV_INPUT, "Damp CV");
         configInput(MIX_CV_INPUT, "Mix CV");
         configOutput(OUT_OUTPUT, "Audio");
+        fbDivider.setDivision(FB_DIVISION);
+    }
+
+    void onSampleRateChange(const SampleRateChangeEvent &e) override
+    {
+        updateFeedback(params[FEEDBACK_PARAM].getValue(), e.sampleRate);
     }
 
     void onReset() override
@@ -68,18 +91,29 @@ struct Combverb : Module
         }
     }
 
-    float combFeedback(float size)
+    void updateFeedback(float knob, float sampleRate)
     {
-        if (size < 0.7f)
-            return 0.7f + size / 0.7f * 0.3f;
-        return 1.f + (size - 0.7f) / 0.3f * 0.017f;
+        float rate;
+        if (knob < UNITY_POS)
+            rate = -60.f / (DECAY_MIN * std::pow(DECAY_MAX / DECAY_MIN, knob / UNITY_POS));
+        else
+            rate = GROW_MAX * (knob - UNITY_POS) / (1.f - UNITY_POS);
+
+        for (int n = 0; n < NUM_COMBS; n++)
+            fbCache[n] = std::pow(10.f, rate * COMB_LEN[n] / sampleRate / 20.f);
+    }
+
+    float dampCoeff(float knob, float sampleRate)
+    {
+        float fc = DAMP_FC_MAX * std::pow(DAMP_FC_MIN / DAMP_FC_MAX, knob);
+        return std::exp(-TWO_PI * fc / sampleRate);
     }
 
     float comb(int n, float in, float fb, float damp)
     {
         float out = combBuf[n][combIdx[n]];
         combStore[n] = out * (1.f - damp) + combStore[n] * damp + 1e-20f;
-        combBuf[n][combIdx[n]] = in + combStore[n] * fb;
+        combBuf[n][combIdx[n]] = FB_CEILING * std::tanh((in + combStore[n] * fb) / FB_CEILING);
         if (++combIdx[n] >= COMB_LEN[n])
             combIdx[n] = 0;
         return out;
@@ -97,19 +131,20 @@ struct Combverb : Module
     void process(const ProcessArgs &args) override
     {
         float in = inputs[IN_INPUT].getVoltage();
-        float size = clamp(params[SIZE_PARAM].getValue()
-                           + inputs[SIZE_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f);
-        float damp = clamp(params[DAMP_PARAM].getValue()
-                           + inputs[DAMP_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f) * DAMP_SCALE;
+        float feedback = clamp(params[FEEDBACK_PARAM].getValue()
+                           + inputs[FEEDBACK_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f);
+        float damp = dampCoeff(clamp(params[DAMP_PARAM].getValue()
+                           + inputs[DAMP_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f), args.sampleRate);
         float mix = clamp(params[MIX_PARAM].getValue()
                           + inputs[MIX_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f);
 
-        float fb = combFeedback(size);
+        if (fbDivider.process())
+            updateFeedback(feedback, args.sampleRate);
 
         float wet = 0.f;
-        for (int n = 0; n < 8; n++)
-            wet += comb(n, in * INPUT_GAIN, fb, damp);
-        for (int n = 0; n < 4; n++)
+        for (int n = 0; n < NUM_COMBS; n++)
+            wet += comb(n, in * INPUT_GAIN, fbCache[n], damp);
+        for (int n = 0; n < NUM_AP; n++)
             wet = allpass(n, wet);
 
         outputs[OUT_OUTPUT].setVoltage(clamp(in * (1.f - mix) + wet * mix, -10.f, 10.f));
@@ -127,8 +162,8 @@ struct CombverbWidget : ModuleWidget
         setModule(module);
         setPanel(createPanel(asset::plugin(pluginInstance, "res/Combverb.svg")));
 
-        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 32)), module, Combverb::SIZE_PARAM));
-        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 32)), module, Combverb::SIZE_CV_INPUT));
+        addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 32)), module, Combverb::FEEDBACK_PARAM));
+        addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 32)), module, Combverb::FEEDBACK_CV_INPUT));
 
         addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(10, 56)), module, Combverb::DAMP_PARAM));
         addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.64, 56)), module, Combverb::DAMP_CV_INPUT));
