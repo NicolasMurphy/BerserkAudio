@@ -1,6 +1,7 @@
 // Based on and inspired by Freeverb (Jezar at Dreampoint, public domain).
 
 #include "plugin.hpp"
+#include <algorithm>
 #include <cmath>
 
 struct Combverb : Module
