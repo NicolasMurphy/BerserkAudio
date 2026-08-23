@@ -26,13 +26,13 @@ struct Combverb : Module
         OUTPUTS_LEN
     };
 
-    static constexpr int COMB_LEN[8] = {521, 631, 769, 929, 1129, 1373, 1663, 2017};
-    static constexpr int AP_LEN[4] = {556, 441, 341, 225};
-    static constexpr int COMB_MAX = 2017;
-    static constexpr int AP_MAX = 556;
-
     static constexpr int NUM_COMBS = 8;
     static constexpr int NUM_AP = 2;
+
+    static constexpr int COMB_LEN[8] = {521, 631, 769, 929, 1129, 1373, 1663, 2017};
+    static constexpr int AP_LEN[NUM_AP] = {556, 441};
+    static constexpr int COMB_MAX = 2017;
+    static constexpr int AP_MAX = 556;
 
     static constexpr float AP_FB = 0.5f;
     static constexpr float INPUT_GAIN = 0.015f;
@@ -51,8 +51,8 @@ struct Combverb : Module
     int combIdx[8] = {};
     float combStore[8] = {};
 
-    float apBuf[4][AP_MAX] = {};
-    int apIdx[4] = {};
+    float apBuf[NUM_AP][AP_MAX] = {};
+    int apIdx[NUM_AP] = {};
 
     float fbCache[8] = {};
     dsp::ClockDivider fbDivider;
@@ -84,7 +84,7 @@ struct Combverb : Module
             combIdx[n] = 0;
             combStore[n] = 0.f;
         }
-        for (int n = 0; n < 4; n++)
+        for (int n = 0; n < NUM_AP; n++)
         {
             std::fill(apBuf[n], apBuf[n] + AP_MAX, 0.f);
             apIdx[n] = 0;
@@ -152,7 +152,7 @@ struct Combverb : Module
 };
 
 constexpr int Combverb::COMB_LEN[8];
-constexpr int Combverb::AP_LEN[4];
+constexpr int Combverb::AP_LEN[Combverb::NUM_AP];
 
 
 struct CombverbWidget : ModuleWidget
