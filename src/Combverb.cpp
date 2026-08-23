@@ -56,6 +56,7 @@ struct Combverb : Module
     int apIdx[NUM_AP] = {};
 
     float fbCache[8] = {};
+    float dampCache = 0.f;
     dsp::ClockDivider fbDivider;
 
     Combverb()
@@ -134,17 +135,19 @@ struct Combverb : Module
         float in = inputs[IN_INPUT].getVoltage();
         float feedback = clamp(params[FEEDBACK_PARAM].getValue()
                            + inputs[FEEDBACK_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f);
-        float damp = dampCoeff(clamp(params[DAMP_PARAM].getValue()
-                           + inputs[DAMP_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f), args.sampleRate);
         float mix = clamp(params[MIX_PARAM].getValue()
                           + inputs[MIX_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f);
 
         if (fbDivider.process())
+        {
             updateFeedback(feedback, args.sampleRate);
+            dampCache = dampCoeff(clamp(params[DAMP_PARAM].getValue()
+                               + inputs[DAMP_CV_INPUT].getVoltage() * 0.1f, 0.f, 1.f), args.sampleRate);
+        }
 
         float wet = 0.f;
         for (int n = 0; n < NUM_COMBS; n++)
-            wet += comb(n, in * INPUT_GAIN, fbCache[n], damp);
+            wet += comb(n, in * INPUT_GAIN, fbCache[n], dampCache);
         for (int n = 0; n < NUM_AP; n++)
             wet = allpass(n, wet);
 
