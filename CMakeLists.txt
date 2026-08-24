@@ -25,6 +25,7 @@ add_library(BerserkAudio STATIC)
 
 target_sources(BerserkAudio PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/src/plugin.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Combverb.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Scrambler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Xenizer.cpp
 )

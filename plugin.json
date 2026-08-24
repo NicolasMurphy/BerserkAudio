@@ -9,6 +9,15 @@
   "sourceUrl": "https://github.com/NicolasMurphy/BerserkAudio",
   "modules": [
     {
+      "slug": "Combverb",
+      "name": "Combverb",
+      "description": "Comb reverb with self-oscillating feedback.",
+      "tags": [
+        "Reverb",
+        "Effect"
+      ]
+    },
+    {
       "slug": "Scrambler",
       "name": "Scrambler",
       "description": "Sample-reordering effect.",
