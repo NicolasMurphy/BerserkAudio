@@ -15,7 +15,7 @@ include(${METAMODULE_SDK_DIR}/plugin.cmake)
 
 # --- Project definition ---
 project(BerserkAudio
-    VERSION 2.0.1
+    VERSION 2.1.0
     DESCRIPTION "Berserk Audio Plugin for MetaModule"
     LANGUAGES C CXX ASM
 )
